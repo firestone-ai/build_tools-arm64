@@ -7,6 +7,7 @@ import os
 import subprocess
 import deps
 import shutil
+import multiprocessing
 
 def get_branch_name(directory):
   cur_dir = os.getcwd()
@@ -53,60 +54,62 @@ def install_qt():
                "-skip", "qtwebengine"]
 
   base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "./configure", qt_params)
-  base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["-j", "12"])
+  base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", [
+      "-j",
+      str(multiprocessing.cpu_count())
+  ])
   base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["install"])
   return
 
-if not base.is_file("./node_js_setup_10.x"):
-  print("install dependencies...")
-  deps.install_deps()  
+if base.get_env("onlyofficeautomate") == 1:
+    if not base.is_file("./node_js_setup_10.x"):
+        print("install dependencies...")
+        deps.install_deps()  
 
-if not base.is_dir("./qt_build"):  
-  print("install qt...")
-  install_qt()
+    if not base.is_dir("./qt_build"):  
+        print("install qt...")
+        install_qt()
 
-branch = get_branch_name("../..")
+elif base.get_env("onlyofficeautomate") == 2:
+    branch = get_branch_name("../..")
 
-array_args = sys.argv[1:]
-array_modules = []
-params = []
+    array_args = sys.argv[1:]
+    array_modules = []
+    params = []
 
-config = {}
-for arg in array_args:
-  if (0 == arg.find("--")):
-    indexEq = arg.find("=")
-    if (-1 != indexEq):
-      config[arg[2:indexEq]] = arg[indexEq + 1:]
-      params.append(arg[:indexEq])
-      params.append(arg[indexEq + 1:])
-  else:
-    array_modules.append(arg)
+    config = {}
+    for arg in array_args:
+    if (0 == arg.find("--")):
+        indexEq = arg.find("=")
+        if (-1 != indexEq):
+        config[arg[2:indexEq]] = arg[indexEq + 1:]
+        params.append(arg[:indexEq])
+        params.append(arg[indexEq + 1:])
+    else:
+        array_modules.append(arg)
 
-if ("branch" in config):
-  branch = config["branch"]
+    if ("branch" in config):
+        branch = config["branch"]
 
-print("---------------------------------------------")
-print("build branch: " + branch)
-print("---------------------------------------------")
+    print("---------------------------------------------")
+    print("build branch: " + branch)
+    print("---------------------------------------------")
 
-modules = " ".join(array_modules)
-if "" == modules:
-  modules = "desktop builder server"
+    modules = " ".join(array_modules)
+    if "" == modules:
+        modules = "desktop builder server"
 
-print("---------------------------------------------")
-print("build modules: " + modules)
-print("---------------------------------------------")
+    print("---------------------------------------------")
+    print("build modules: " + modules)
+    print("---------------------------------------------")
 
-build_tools_params = ["--branch", branch, 
-                      "--module", modules, 
-                      "--update", "1",
-                      "--qt-dir", os.getcwd() + "/qt_build/Qt-5.9.9"] + params
+    build_tools_params = ["--branch", branch, 
+                        "--module", modules, 
+                        "--update", "1",
+                        "--qt-dir", os.getcwd() + "/qt_build/Qt-5.9.9"] + params
 
-shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
-os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
+    shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
+    os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
 
-base.cmd_in_dir("../..", "./configure.py", build_tools_params)
-base.cmd_in_dir("../..", "./make.py")
-
-
-
+    base.cmd_in_dir("../..", "./configure.py", build_tools_params)
+    base.cmd_in_dir("../..", "./make.py")

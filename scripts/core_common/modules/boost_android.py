@@ -5,6 +5,7 @@ sys.path.append('../..')
 import config
 import base
 import os
+import multiprocessing
 
 platforms = {
   "arm64_v8a" : {
@@ -89,7 +90,7 @@ def make(platform):
   base.set_env("BFA_LINKER_FLAGS_FOR_ABI", current_platform["linker_flags"])
 
   print(current_platform)
-  base.cmd("./b2", ["-q", "-j4",
+  base.cmd("./b2", ["-q", "-j", str(multiprocessing.cpu_count())
     "toolset=clang-" + current_platform["toolset"],
     "binary-format=elf",
     "address-model=" + current_platform["address_model"],

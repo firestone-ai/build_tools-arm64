@@ -1,4 +1,7 @@
-FROM ubuntu:18.04
+# This dockerfile is for exlusively building linux/arm64 desktopeditors
+
+# Step 1
+FROM ubuntu:18.04 AS onlyoffice-step1
 
 ENV TZ=Etc/UTC
 
@@ -8,7 +11,9 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get -y install curl && \
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
+# nodejs done manually cuz 8 is the latest in repos
 
+# renaming clang-10 to clang is kinda necessary
 RUN apt-get -y install nodejs python python3 clang-10 wget sudo x11-utils apt-utils && \
 rm -v /usr/bin/python && \
 mv -v /usr/bin/clang-10 /usr/bin/clang && \
@@ -82,13 +87,68 @@ mv -v /usr/bin/yaml-bench-10 /usr/bin/yaml-bench && \
 mv -v /usr/bin/yaml2obj-10 /usr/bin/yaml2obj && \
 ln -vs /usr/bin/python2 /usr/bin/python
 
+# Step 2
+FROM onlyoffice-step1 as onlyoffice-step2
 ADD . /build_tools
 WORKDIR /build_tools
-
-RUN cd tools/linux && \
+RUN export onlyofficeautomate=1 && \
+cd /build_tools/tools/linux && \
 python3 -u ./automate.py desktop && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN cd tools/linux && \
-    python3 -u ./automate_p2.py desktop
+# Step 3
+FROM onlyoffice-step2 as onlyoffice-step3
+RUN export onlyofficemake=1 && \
+export onlyofficeautomate=2 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+
+# Step 4
+FROM onlyoffice-step3 as onlyoffice-step4
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+
+# Step 5
+FROM onlyoffice-step4 as onlyoffice-step5
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=1 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+
+# Step 6
+FROM onlyoffice-step5 as onlyoffice-step6
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=2 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+# Step 7
+FROM onlyoffice-step6 as onlyoffice-step7
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=3 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+# Step 8
+FROM onlyoffice-step7 as onlyoffice-step8
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=4 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+# Step 9
+FROM onlyoffice-step8 as onlyoffice-step9
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=5 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+# this is the current target

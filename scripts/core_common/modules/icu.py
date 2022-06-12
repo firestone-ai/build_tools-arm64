@@ -6,6 +6,7 @@ import config
 import base
 import os
 import icu_android
+import multiprocessing
 
 def make():
   print("[fetch & build]: icu")
@@ -66,7 +67,7 @@ def make():
       base.create_dir(base_dir + "/icu/cross_build")
       os.chdir("icu/cross_build")
       base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
-      base.cmd("make", ["-j4"])
+      base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
       base.cmd("make", ["install"], True)
       base.create_dir(base_dir + "/linux_64")
       base.create_dir(base_dir + "/linux_64/build")

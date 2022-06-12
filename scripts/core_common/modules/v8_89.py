@@ -31,7 +31,7 @@ def make_args(args, platform, is_64=True, is_debug=False):
   
   if (platform == "linux"):
     args_copy.append("is_clang=true")
-    if not os.uname()[len(os.uname())-1]:
+    if not os.uname()[len(os.uname())-1] == "aarch64":
         args_copy.append("use_sysroot=false")
   if (platform == "windows"):
     args_copy.append("is_clang=false")    
@@ -96,9 +96,11 @@ def make():
              "treat_warnings_as_errors=false"
   ]
 
-  if os.uname()[len(os.uname())-1]:
+  if os.uname()[len(os.uname())-1] == "aarch64":
+    print("--- Arm64 specific v8_89 patches ---")
     gn_args.append("clang_base_path=\\\"/usr/\\\"")
     gn_args.append("clang_use_chrome_plugins=false")
+    
     base.cmd("build/linux/sysroot_scripts/install-sysroot.py", ["--arch=arm64"], False)
     
     base.cmd("git", ["clone", "https://github.com/ninja-build/ninja.git", "-b", "v1.8.2", "customnin"], False)

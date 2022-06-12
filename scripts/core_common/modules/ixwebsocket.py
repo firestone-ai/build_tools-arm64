@@ -6,6 +6,7 @@ import base
 import os
 import config
 from distutils.version import LooseVersion, StrictVersion
+import multiprocessing
 
 current_dir = base.get_script_dir() + "/../../core/Common/3dParty/ixwebsocket"
 
@@ -58,7 +59,7 @@ def build_arch(platform, arch, params, is_debug=False):
     base.cmd(CMAKE, ["--build", ".", "--config", "Release"])
     base.cmd(CMAKE, ["--install", ".", "--config", "Release", "--prefix", cache_dir + "/../" + arch])
   elif(-1 != platform.find("android") or -1 != platform.find("linux")):
-    base.cmd("make", ["-j4"])
+    base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
     base.cmd("make", ["DESTDIR=" + cache_dir + "/../" + arch, "install"])
   elif(-1 != platform.find("windows")):
     conf = "Debug" if is_debug else "Release"
