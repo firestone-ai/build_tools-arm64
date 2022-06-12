@@ -61,7 +61,8 @@ def install_qt():
   base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["install"])
   return
 
-if base.get_env("onlyofficeautomate") == 1:
+if base.get_env("onlyofficeautomate") == '1':
+    print("")
     if not base.is_file("./node_js_setup_10.x"):
         print("install dependencies...")
         deps.install_deps()  
@@ -70,7 +71,7 @@ if base.get_env("onlyofficeautomate") == 1:
         print("install qt...")
         install_qt()
 
-elif base.get_env("onlyofficeautomate") == 2:
+elif base.get_env("onlyofficeautomate") == '2':
     branch = get_branch_name("../..")
 
     array_args = sys.argv[1:]
@@ -79,14 +80,14 @@ elif base.get_env("onlyofficeautomate") == 2:
 
     config = {}
     for arg in array_args:
-    if (0 == arg.find("--")):
-        indexEq = arg.find("=")
-        if (-1 != indexEq):
-        config[arg[2:indexEq]] = arg[indexEq + 1:]
-        params.append(arg[:indexEq])
-        params.append(arg[indexEq + 1:])
-    else:
-        array_modules.append(arg)
+        if (0 == arg.find("--")):
+            indexEq = arg.find("=")
+            if (-1 != indexEq):
+                config[arg[2:indexEq]] = arg[indexEq + 1:]
+                params.append(arg[:indexEq])
+                params.append(arg[indexEq + 1:])
+        else:
+            array_modules.append(arg)
 
     if ("branch" in config):
         branch = config["branch"]

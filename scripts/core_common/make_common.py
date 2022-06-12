@@ -32,23 +32,23 @@ def make():
       if base.is_dir(toolchain):
         check_android_ndk_macos_arm(toolchain + "/prebuilt")
 
-  if base.get_env("onlyofficecommon") == 1:
+  if base.get_env("onlyofficecommon") == '1':
     boost.make()
-  elif base.get_env("onlyofficecommon") == 2:
+  elif base.get_env("onlyofficecommon") == '2':
     cef.make()
-  elif base.get_env("onlyofficecommon") == 3:
+  elif base.get_env("onlyofficecommon") == '3':
     icu.make()
-  elif base.get_env("onlyofficecommon") == 4:
+  elif base.get_env("onlyofficecommon") == '4':
     openssl.make()
-  elif base.get_env("onlyofficecommon") == 5:
+  elif base.get_env("onlyofficecommon") == '5':
     v8.make()
-  elif base.get_env("onlyofficecommon") == 6:
+  elif base.get_env("onlyofficecommon") == '6':
     html2.make()
-  elif base.get_env("onlyofficecommon") == 7:
+  elif base.get_env("onlyofficecommon") == '7':
     hunspell.make(False)
-  elif base.get_env("onlyofficecommon") == 8:
+  elif base.get_env("onlyofficecommon") == '8':
     glew.make()
-  elif base.get_env("onlyofficecommon") == 9:
+  elif base.get_env("onlyofficecommon") == '9':
     if config.check_option("module", "mobile"):
         curl.make()
         websocket.make()
