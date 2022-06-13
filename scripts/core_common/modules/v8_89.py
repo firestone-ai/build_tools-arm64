@@ -97,7 +97,6 @@ def make():
   ]
 
   if os.uname()[len(os.uname())-1] == "aarch64":
-    print("--- Arm64 specific v8_89 patches ---")
     gn_args.append("clang_base_path=\\\"/usr/\\\"")
     gn_args.append("clang_use_chrome_plugins=false")
     

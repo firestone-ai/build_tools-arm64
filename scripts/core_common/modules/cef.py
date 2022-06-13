@@ -20,7 +20,6 @@ def make():
 
   for platform in platforms:
     if not config.check_option("platform", platform):
-      print("--- cef was skipped.. ---")
       continue
 
     if not os.uname()[len(os.uname())-1] == "aarch64":
@@ -68,8 +67,6 @@ def make():
                 base.cmd("mv", ["Chromium Embedded Framework.framework", "build/Chromium Embedded Framework.framework"])
 
     else:
-        print("--- Using arm64 specific stuff ---")
-        
         base.download("https://cef-builds.spotifycdn.com/cef_binary_87.1.14%2Bga29e9a3%2Bchromium-87.0.4280.141_linuxarm64_minimal.tar.bz2", "cef_binary.tar.bz2")
         
         base.cmd("tar",["-xvf",
@@ -81,18 +78,19 @@ def make():
         
         base.copy_files("cef_binary/Release/*",
                         "/core/Common/3dParty/cef/linux_arm64/build/"
-                       ]
+                       )
         base.copy_files("cef_binary/Resources/*",
                         "core/Common/3dParty/cef/linux_arm64/build/"
-                       ]
-        shutil.rmtree("cef_binary_87.1.14+ga29e9a3+chromium-87.0.4280.141_linuxarm64_minimal")
+                       )
+        shutil.rmtree(
+            "cef_binary_87.1.14+ga29e9a3+chromium-87.0.4280.141_linuxarm64_minimal"
+            )
         
         
         base.replaceInFile(
             "/desktop-sdk/ChromiumBasedEditors/lib/ascdocumentscore.pri",
             "ADD_DEPENDENCY(graphics, kernel, UnicodeConverter, kernel_network, PdfWriter, PdfReader, XpsFile, DjVuFile, HtmlRenderer, hunspell, ooxmlsignature)\n!core_windows:DEFINES += DOCUMENTSCORE_OPENSSL_SUPPORT\n\nCEF_PROJECT_PRI=$$PWD/cef_pri",
             "ADD_DEPENDENCY(graphics, kernel, UnicodeConverter, kernel_network, PdfWriter, PdfReader, XpsFile, DjVuFile, HtmlRenderer, hunspell, ooxmlsignature)\n!core_windows:DEFINES += DOCUMENTSCORE_OPENSSL_SUPPORT\n\nCEF_PROJECT_PRI=$$PWD/cef_pri_87\nDEFINES += CEF_VERSION_ABOVE_86")
-    
     os.chdir(base_dir)
 
   os.chdir(old_cur)

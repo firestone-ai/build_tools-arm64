@@ -174,7 +174,7 @@ def make():
   # build
   os.chdir("v8")
 
-  if os.uname()[len(os.uname())-1]:
+  if os.uname()[len(os.uname())-1] == "aarch64":
     base_args64 = "target_cpu=\\\"arm64\\\" v8_target_cpu=\\\"arm64\\\" v8_static_library=true is_component_build=false v8_use_snapshot=false"
     base_args32 = "target_cpu=\\\"arm\\\" v8_target_cpu=\\\"arm\\\" v8_static_library=true is_component_build=false v8_use_snapshot=false"
   else:

@@ -59,6 +59,8 @@ def install_qt():
       str(multiprocessing.cpu_count())
   ])
   base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["install"])
+  shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
+  os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
   return
 
 if base.get_env("onlyofficeautomate") == '1':
@@ -108,9 +110,6 @@ elif base.get_env("onlyofficeautomate") == '2':
                         "--module", modules, 
                         "--update", "1",
                         "--qt-dir", os.getcwd() + "/qt_build/Qt-5.9.9"] + params
-
-    shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
-    os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
 
     base.cmd_in_dir("../..", "./configure.py", build_tools_params)
     base.cmd_in_dir("../..", "./make.py")

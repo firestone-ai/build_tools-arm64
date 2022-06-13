@@ -1,0 +1,20 @@
+
+#RUN rm /build_tools/tools/linux/automate.py /build_tools/make.py
+#ADD ./tools/linux/automate.py /build_tools/tools/linux/automate.py
+#ADD ./make.py /build_tools/make.py
+    
+# Step 8
+FROM bill88t/onlyoffice-layers:7
+RUN sudo apt-get update && \
+sudo apt-get install -y lld-10 && \
+mv -v /usr/bin/ld.lld-10 /usr/bin/ld.lld && \
+mv -v /usr/bin/lld-10 /usr/bin/lld && \
+mv -v /usr/bin/ld64.lld-10 /usr/bin/ld64.lld && \
+mv -v /usr/bin/lld-link-10 /usr/bin/lld-link && \
+export onlyofficeautomate=2 && \
+export onlyofficemake=2 && \
+export onlyofficecommon=5 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+# this is the current target
