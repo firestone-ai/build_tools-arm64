@@ -34,21 +34,17 @@ def make():
 
   if base.get_env("onlyofficecommon") == '1':
     boost.make()
-  elif base.get_env("onlyofficecommon") == '2':
     cef.make()
-  elif base.get_env("onlyofficecommon") == '3':
     icu.make()
-  elif base.get_env("onlyofficecommon") == '4':
     openssl.make()
-  elif base.get_env("onlyofficecommon") == '5':
-    v8.make()
-  elif base.get_env("onlyofficecommon") == '6':
+    v8.make() # known working now
+  elif base.get_env("onlyofficecommon") == '2':
     html2.make()
-  elif base.get_env("onlyofficecommon") == '7':
+  elif base.get_env("onlyofficecommon") == '3':
     hunspell.make(False)
-  elif base.get_env("onlyofficecommon") == '8':
+  elif base.get_env("onlyofficecommon") == '4':
     glew.make()
-  elif base.get_env("onlyofficecommon") == '9':
+  elif base.get_env("onlyofficecommon") == '5':
     if config.check_option("module", "mobile"):
         curl.make()
         websocket.make()

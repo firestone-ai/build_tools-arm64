@@ -121,25 +121,3 @@ export onlyofficemake=2 && \
 export onlyofficecommon=2 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
-
-RUN export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=3 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-RUN export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=4 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-# Step 9
-FROM onlyoffice-step1 as onlyoffice-step2
-RUN export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=5 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-# this is the current target
