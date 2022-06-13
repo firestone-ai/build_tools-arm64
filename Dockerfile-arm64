@@ -94,30 +94,45 @@ mv -v /usr/bin/lld-link-10 /usr/bin/lld-link
 ADD . /build_tools
 WORKDIR /build_tools
 
-RUN export onlyofficeautomate=1 && \
+RUN \
+export onlyofficeautomate=1 && \
 cd /build_tools/tools/linux && \
 python3 -u ./automate.py desktop && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN export onlyofficemake=1 && \
+RUN \
 export onlyofficeautomate=2 && \
+export onlyofficemake=1 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
 
-RUN export onlyofficeautomate=2 && \
+RUN \
+export onlyofficeautomate=2 && \
 export onlyofficemake=2 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
 
-RUN export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=1 && \
+RUN \
+export onlyofficeautomate=2 && \
+export onlyofficemake=3 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
-
-RUN export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=2 && \
+    
+RUN \
+export onlyofficeautomate=2 && \
+export onlyofficemake=4 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+RUN \
+export onlyofficeautomate=2 && \
+export onlyofficemake=5 && \
+cd /build_tools/tools/linux && \
+    python3 -u ./automate.py desktop
+    
+RUN \
+export onlyofficeautomate=2 && \
+export onlyofficemake=6 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop

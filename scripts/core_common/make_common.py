@@ -31,20 +31,14 @@ def make():
     for toolchain in glob.glob(base.get_env("ANDROID_NDK_ROOT") + "/toolchains/*"):
       if base.is_dir(toolchain):
         check_android_ndk_macos_arm(toolchain + "/prebuilt")
-
-  if base.get_env("onlyofficecommon") == '1':
     boost.make()
     cef.make()
     icu.make()
     openssl.make()
     v8.make() # known working now
-  elif base.get_env("onlyofficecommon") == '2':
     html2.make()
-  elif base.get_env("onlyofficecommon") == '3':
     hunspell.make(False)
-  elif base.get_env("onlyofficecommon") == '4':
     glew.make()
-  elif base.get_env("onlyofficecommon") == '5':
     if config.check_option("module", "mobile"):
         curl.make()
         websocket.make()

@@ -1,9 +1,9 @@
-# Step 8
-FROM bill88t/onlyoffice-layers:8
-export onlyofficeautomate=2 && \
-export onlyofficemake=2 && \
-export onlyofficecommon=2 && \
+FROM 192.168.1.130:5000/onlyoffice:10
+
+RUN \
+rm /build_tools/make.py
+ADD ./make.py /build_tools/make.py
+RUN export onlyofficeautomate=2 && \
+export onlyofficemake=3 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
-    
-# this is the current target
