@@ -6,7 +6,7 @@ import base
 import os
 import subprocess
 
-def install_deps():
+def install_deps(arm=False):
   if base.is_file("./packages_complete"):
     return
 

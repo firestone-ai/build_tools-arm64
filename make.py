@@ -52,7 +52,7 @@ config.parse_defaults()
 base.check_build_version(base_dir)
 
 # update
-if base.get_env("onlyofficemake") == '1':
+if base.get_env("onlyofficepart") == '1':
     if ("1" == config.option("update")):
         repositories = base.get_repositories()
         base.update_repositories(repositories)
@@ -68,7 +68,6 @@ if base.get_env("onlyofficemake") == '1':
     
     make_common.make() # core 3rdParty
 
-elif base.get_env("onlyofficemake") == '2':
     # build updmodule for desktop (only for windows version)
     if ("windows" == base.host_platform()) and (config.check_option("module", "desktop")):
         config.extend_option("config", "updmodule")
@@ -84,17 +83,11 @@ elif base.get_env("onlyofficemake") == '2':
         #base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/include", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/include")
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_32")
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/x64/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_64")
-    
+
+elif base.get_env("onlyofficepart") == '2':
     build.make()
-
-elif base.get_env("onlyofficemake") == '3':
     build_js.make()
-
-elif base.get_env("onlyofficemake") == '4':
     build_server.make() #server
-
-elif base.get_env("onlyofficemake") == '5':
     deploy.make()
-
 else:
-    print("No onlyofficemake env var..")
+    print("No onlyofficepart env var..")

@@ -69,11 +69,10 @@ if base.get_env("onlyofficeautomate") == '1':
         print("install dependencies...")
         deps.install_deps()
 
-    if not base.is_dir("./qt_build"):  
+    if not base.is_dir("./qt_build"):
         print("install qt...")
         install_qt()
-
-elif base.get_env("onlyofficeautomate") == '2':
+    
     branch = get_branch_name("../..")
 
     array_args = sys.argv[1:]

@@ -93,26 +93,12 @@ mv -v /usr/bin/ld.lld-10 /usr/bin/ld.lld && \
 mv -v /usr/bin/lld-10 /usr/bin/lld && \
 mv -v /usr/bin/ld64.lld-10 /usr/bin/ld64.lld && \
 mv -v /usr/bin/lld-link-10 /usr/bin/lld-link && \
-export onlyofficeautomate=1 && \
+export onlyofficepart=1 && \
 python3 -u ./automate.py desktop && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* && \
 export onlyofficeautomate=2 && \
-export onlyofficemake=1 && \
-python3 -u ./automate.py desktop && \
-export onlyofficemake=2 && \
 python3 -u ./automate.py desktop
 
-#export onlyofficeautomate=2 && \
-#export onlyofficemake=3 && \
-#    python3 -u ./automate.py desktop
-
-#export onlyofficeautomate=2 && \
-#export onlyofficemake=4 && \
-#    python3 -u ./automate.py desktop && \
-#export onlyofficeautomate=2 && \
-#export onlyofficemake=5 && \
-#    python3 -u ./automate.py desktop && \
-#export onlyofficeautomate=2 && \
-#export onlyofficemake=6 && \
-#    python3 -u ./automate.py desktop
+# onlyofficepart=1 is known working
+# onlyofficepart=2 is da borked
