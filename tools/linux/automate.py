@@ -63,52 +63,50 @@ def install_qt():
   os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
   return
 
-if base.get_env("onlyofficeautomate") == '1':
-    print("")
-    if not base.is_file("./node_js_setup_10.x"):
-        print("install dependencies...")
-        deps.install_deps()
+if not base.is_file("./node_js_setup_10.x"):
+    print("install dependencies...")
+    deps.install_deps()
 
-    if not base.is_dir("./qt_build"):
-        print("install qt...")
-        install_qt()
-    
-    branch = get_branch_name("../..")
+if not base.is_dir("./qt_build"):
+    print("install qt...")
+    install_qt()
 
-    array_args = sys.argv[1:]
-    array_modules = []
-    params = []
+branch = get_branch_name("../..")
 
-    config = {}
-    for arg in array_args:
-        if (0 == arg.find("--")):
-            indexEq = arg.find("=")
-            if (-1 != indexEq):
-                config[arg[2:indexEq]] = arg[indexEq + 1:]
-                params.append(arg[:indexEq])
-                params.append(arg[indexEq + 1:])
-        else:
-            array_modules.append(arg)
+array_args = sys.argv[1:]
+array_modules = []
+params = []
 
-    if ("branch" in config):
-        branch = config["branch"]
+config = {}
+for arg in array_args:
+    if (0 == arg.find("--")):
+        indexEq = arg.find("=")
+        if (-1 != indexEq):
+            config[arg[2:indexEq]] = arg[indexEq + 1:]
+            params.append(arg[:indexEq])
+            params.append(arg[indexEq + 1:])
+    else:
+        array_modules.append(arg)
 
-    print("---------------------------------------------")
-    print("build branch: " + branch)
-    print("---------------------------------------------")
+if ("branch" in config):
+    branch = config["branch"]
 
-    modules = " ".join(array_modules)
-    if "" == modules:
-        modules = "desktop builder server"
+print("---------------------------------------------")
+print("build branch: " + branch)
+print("---------------------------------------------")
 
-    print("---------------------------------------------")
-    print("build modules: " + modules)
-    print("---------------------------------------------")
+modules = " ".join(array_modules)
+if "" == modules:
+    modules = "desktop builder server"
 
-    build_tools_params = ["--branch", branch, 
-                        "--module", modules, 
-                        "--update", "1",
-                        "--qt-dir", os.getcwd() + "/qt_build/Qt-5.9.9"] + params
+print("---------------------------------------------")
+print("build modules: " + modules)
+print("---------------------------------------------")
 
-    base.cmd_in_dir("../..", "./configure.py", build_tools_params)
-    base.cmd_in_dir("../..", "./make.py")
+build_tools_params = ["--branch", branch, 
+                    "--module", modules, 
+                    "--update", "1",
+                    "--qt-dir", os.getcwd() + "/qt_build/Qt-5.9.9"] + params
+
+base.cmd_in_dir("../..", "./configure.py", build_tools_params)
+base.cmd_in_dir("../..", "./make.py")
