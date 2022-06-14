@@ -120,8 +120,8 @@ def make():
     base.cmd("cp", ["./customgn/out/gn", "./buildtools/linux64/gn"])
     shutil.rmtree("customgn")
     
-    base.cmd2("gn", ["gen", "out.gn/linux_arm64", make_args(gn_args, "linux_arm64", False)])
-    base.cmd("ninja", ["-C", "out.gn/linux_arm64"])
+    base.cmd2("gn", ["gen", "out.gn/linux_64", make_args(gn_args, "linux_arm64", False)])
+    base.cmd("ninja", ["-C", "out.gn/linux_64"]) # temp hack
 
   elif config.check_option("platform", "linux_64"): # it will try to do x64 even if it's arm64
     base.cmd2("gn", ["gen", "out.gn/linux_64", make_args(gn_args, "linux")])

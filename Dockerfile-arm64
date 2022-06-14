@@ -1,7 +1,7 @@
 # This dockerfile is for exlusively building linux/arm64 desktopeditors
 
 # Step 1
-FROM ubuntu:18.04 AS onlyoffice-step1
+FROM ubuntu:18.04
 
 ENV TZ=Etc/UTC
 
@@ -14,7 +14,7 @@ curl -sL https://deb.nodesource.com/setup_10.x | bash -
 # nodejs done manually cuz 8 is the latest in repos
 
 # renaming clang-10 to clang is kinda necessary
-RUN apt-get -y install nodejs python python3 clang-10 wget sudo x11-utils apt-utils && \
+RUN apt-get -y install nodejs python python3 clang-10 lld-10 wget sudo x11-utils apt-utils && \
 rm -v /usr/bin/python && \
 mv -v /usr/bin/clang-10 /usr/bin/clang && \
 mv -v /usr/bin/clang-cpp-10 /usr/bin/clang-cpp && \
@@ -99,40 +99,30 @@ export onlyofficeautomate=1 && \
 cd /build_tools/tools/linux && \
 python3 -u ./automate.py desktop && \
 apt-get clean && \
-rm -rf /var/lib/apt/lists/*
-
-RUN \
+rm -rf /var/lib/apt/lists/* && \
 export onlyofficeautomate=2 && \
 export onlyofficemake=1 && \
 cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-
-RUN \
+    python3 -u ./automate.py desktop && \
 export onlyofficeautomate=2 && \
 export onlyofficemake=2 && \
 cd /build_tools/tools/linux && \
     python3 -u ./automate.py desktop
 
-RUN \
-export onlyofficeautomate=2 && \
-export onlyofficemake=3 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-RUN \
-export onlyofficeautomate=2 && \
-export onlyofficemake=4 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-RUN \
-export onlyofficeautomate=2 && \
-export onlyofficemake=5 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
-    
-RUN \
-export onlyofficeautomate=2 && \
-export onlyofficemake=6 && \
-cd /build_tools/tools/linux && \
-    python3 -u ./automate.py desktop
+#export onlyofficeautomate=2 && \
+#export onlyofficemake=3 && \
+#cd /build_tools/tools/linux && \
+#    python3 -u ./automate.py desktop
+
+#export onlyofficeautomate=2 && \
+#export onlyofficemake=4 && \
+#cd /build_tools/tools/linux && \
+#    python3 -u ./automate.py desktop && \
+#export onlyofficeautomate=2 && \
+#export onlyofficemake=5 && \
+#cd /build_tools/tools/linux && \
+#    python3 -u ./automate.py desktop && \
+#export onlyofficeautomate=2 && \
+#export onlyofficemake=6 && \
+#cd /build_tools/tools/linux && \
+#    python3 -u ./automate.py desktop
