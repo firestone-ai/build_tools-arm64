@@ -24,27 +24,27 @@ base.set_env("BUILD_PLATFORM", config.option("platform"))
 
 # branding
 if ("1" != base.get_env("OO_RUNNING_BRANDING")) and ("" != config.option("branding")):
-  branding_dir = base_dir + "/../" + config.option("branding")
+    branding_dir = base_dir + "/../" + config.option("branding")
 
-  if ("1" == config.option("update")):
-    is_exist = True
-    if not base.is_dir(branding_dir):
-      is_exist = False
-      base.cmd("git", ["clone", config.option("branding-url"), branding_dir])
+    if ("1" == config.option("update")):
+        is_exist = True
+        if not base.is_dir(branding_dir):
+            is_exist = False
+            base.cmd("git", ["clone", config.option("branding-url"), branding_dir])
+        
+        base.cmd_in_dir(branding_dir, "git", ["fetch"], True)
+        
+        if not is_exist or ("1" != config.option("update-light")):
+            base.cmd_in_dir(branding_dir, "git", ["checkout", "-f", config.option("branch")], True)
+        
+        base.cmd_in_dir(branding_dir, "git", ["pull"], True)
 
-    base.cmd_in_dir(branding_dir, "git", ["fetch"], True)
-   
-    if not is_exist or ("1" != config.option("update-light")):
-      base.cmd_in_dir(branding_dir, "git", ["checkout", "-f", config.option("branch")], True)
-
-    base.cmd_in_dir(branding_dir, "git", ["pull"], True)
-
-  if base.is_file(branding_dir + "/build_tools/make.py"):
-    base.check_build_version(branding_dir + "/build_tools")
-    base.set_env("OO_RUNNING_BRANDING", "1")
-    base.set_env("OO_BRANDING", config.option("branding"))
-    base.cmd_in_dir(branding_dir + "/build_tools", "python", ["make.py"])
-    exit(0)
+    if base.is_file(branding_dir + "/build_tools/make.py"):
+        base.check_build_version(branding_dir + "/build_tools")
+        base.set_env("OO_RUNNING_BRANDING", "1")
+        base.set_env("OO_BRANDING", config.option("branding"))
+        base.cmd_in_dir(branding_dir + "/build_tools", "python", ["make.py"])
+        exit(0)
 
 # correct defaults (the branding repo is already updated)
 config.parse_defaults()
@@ -75,7 +75,7 @@ if base.get_env("onlyofficepart") == '1':
         
         if not base.is_file(base_dir + "/tools/WinSparkle-0.7.0.zip"):
             base.cmd("curl.exe", ["https://d2ettrnqo7v976.cloudfront.net/winsparkle/WinSparkle-0.7.0.zip", "--output", base_dir + "/tools/WinSparkle-0.7.0.zip"])
-            
+        
         if not base.is_dir(base_dir + "/tools/WinSparkle-0.7.0"):
             base.cmd("7z.exe", ["x", base_dir + "/tools/WinSparkle-0.7.0.zip", "-otools"])
         

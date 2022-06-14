@@ -20,48 +20,48 @@ def get_branch_name(directory):
   return current_branch
 
 def install_qt():
-  # qt
-  if not base.is_file("./qt_source_5.9.9.tar.xz"):
-    base.download("https://download.qt.io/archive/qt/5.9/5.9.9/single/qt-everywhere-opensource-src-5.9.9.tar.xz", "./qt_source_5.9.9.tar.xz")
+    # qt
+    if not base.is_file("./qt_source_5.9.9.tar.xz"):
+        base.download("https://download.qt.io/archive/qt/5.9/5.9.9/single/qt-everywhere-opensource-src-5.9.9.tar.xz", "./qt_source_5.9.9.tar.xz")
 
-  if not base.is_dir("./qt-everywhere-opensource-src-5.9.9"):
-    base.cmd("tar", ["-xf", "./qt_source_5.9.9.tar.xz"])
+    if not base.is_dir("./qt-everywhere-opensource-src-5.9.9"):
+        base.cmd("tar", ["-xf", "./qt_source_5.9.9.tar.xz"])
 
-  qt_params = ["-opensource",
-               "-confirm-license",
-               "-release",
-               "-shared",
-               "-accessibility",
-               "-prefix",
-               "./../qt_build/Qt-5.9.9/gcc_64",
-               "-qt-zlib",
-               "-qt-libpng",
-               "-qt-libjpeg",
-               "-qt-xcb",
-               "-qt-pcre",
-               "-no-sql-sqlite",
-               "-no-qml-debug",
-               "-gstreamer", "1.0",
-               "-nomake", "examples",
-               "-nomake", "tests",
-               "-skip", "qtenginio",
-               "-skip", "qtlocation",
-               "-skip", "qtserialport",
-               "-skip", "qtsensors",
-               "-skip", "qtxmlpatterns",
-               "-skip", "qt3d",
-               "-skip", "qtwebview",
-               "-skip", "qtwebengine"]
+    qt_params = ["-opensource",
+                "-confirm-license",
+                "-release",
+                "-shared",
+                "-accessibility",
+                "-prefix",
+                "./../qt_build/Qt-5.9.9/gcc_64",
+                "-qt-zlib",
+                "-qt-libpng",
+                "-qt-libjpeg",
+                "-qt-xcb",
+                "-qt-pcre",
+                "-no-sql-sqlite",
+                "-no-qml-debug",
+                "-gstreamer", "1.0",
+                "-nomake", "examples",
+                "-nomake", "tests",
+                "-skip", "qtenginio",
+                "-skip", "qtlocation",
+                "-skip", "qtserialport",
+                "-skip", "qtsensors",
+                "-skip", "qtxmlpatterns",
+                "-skip", "qt3d",
+                "-skip", "qtwebview",
+                "-skip", "qtwebengine"]
 
-  base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "./configure", qt_params)
-  base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", [
-      "-j",
-      str(multiprocessing.cpu_count())
-  ])
-  base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["install"])
-  shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
-  os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
-  return
+    base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "./configure", qt_params)
+    base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", [
+        "-j",
+        str(multiprocessing.cpu_count())
+    ])
+    base.cmd_in_dir("./qt-everywhere-opensource-src-5.9.9", "make", ["install"])
+    shutil.rmtree("/build_tools/tools/linux/qt-everywhere-opensource-src-5.9.9")
+    os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
+    return
 
 if not base.is_file("./node_js_setup_10.x"):
     print("install dependencies...")
@@ -96,6 +96,7 @@ print("build branch: " + branch)
 print("---------------------------------------------")
 
 modules = " ".join(array_modules)
+
 if "" == modules:
     modules = "desktop builder server"
 
