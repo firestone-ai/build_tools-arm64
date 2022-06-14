@@ -1,7 +1,4 @@
-# This dockerfile is for exlusively building linux/arm64 desktopeditors
-
-# Step 1
-FROM ubuntu:18.04
+FROM 192.168.1.130:5000/ubuntu:18.04
 
 ENV TZ=Etc/UTC
 
@@ -11,12 +8,10 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get -y install curl && \
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
-# nodejs done manually cuz 8 is the latest in repos
 
 ADD . /build_tools
 WORKDIR /build_tools/tools/linux
 
-# Stuff that have to be installed and modified "manually"
 RUN apt-get -y install nodejs python python3 clang-10 lld-10 wget sudo x11-utils apt-utils && \
 rm -v /usr/bin/python && \
 mv -v /usr/bin/clang-10 /usr/bin/clang && \
@@ -99,6 +94,3 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/* && \
 export onlyofficeautomate=2 && \
 sh -c ./automate.py desktop
-
-# onlyofficepart=1 is known working
-# onlyofficepart=2 is da borked

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
 
 import sys
 sys.path.append('../../scripts')
@@ -67,7 +67,7 @@ def install_deps(arm=False):
     base.cmd("sudo", ["npm", "install", "-g", "npm@6"])
   else:
     print("OK")
-    if not os.uname().machine.startswith('a'):
+    if not os.uname()[len(os.uname())-1] == "aarch64":
         base.cmd("sudo", ["apt-get", "-y", "install", "npm", "yarn"], True)
   base.cmd("sudo", ["npm", "install", "-g", "grunt-cli"])
   base.cmd("sudo", ["npm", "install", "-g", "pkg"])
