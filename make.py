@@ -1,5 +1,4 @@
 #!/usr/bin/python -u
-# this shebang is needed for the messages to come through correctly
 
 import sys
 sys.path.append('scripts')
@@ -59,18 +58,17 @@ if base.get_env("onlyofficemake") == '1':
         base.update_repositories(repositories)
 
     base.configure_common_apps()
-
-    # developing...
+    
     develop.make();
 
     # check only js builds
     if ("1" == base.get_env("OO_ONLY_BUILD_JS")):
         build_js.make()
         exit(0)
+    
+    make_common.make() # core 3rdParty
+
 elif base.get_env("onlyofficemake") == '2':
-    # core 3rdParty
-    make_common.make()
-elif base.get_env("onlyofficemake") == '3':
     # build updmodule for desktop (only for windows version)
     if ("windows" == base.host_platform()) and (config.check_option("module", "desktop")):
         config.extend_option("config", "updmodule")
@@ -87,14 +85,16 @@ elif base.get_env("onlyofficemake") == '3':
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_32")
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/x64/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_64")
     
-    # build
     build.make()
-elif base.get_env("onlyofficemake") == '4':
-    # js
+
+elif base.get_env("onlyofficemake") == '3':
     build_js.make()
+
+elif base.get_env("onlyofficemake") == '4':
+    build_server.make() #server
+
 elif base.get_env("onlyofficemake") == '5':
-    #server
-    build_server.make()
-elif base.get_env("onlyofficemake") == '6':
-    # deploy
     deploy.make()
+
+else:
+    print("No onlyofficemake env var..")
