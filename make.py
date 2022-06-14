@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
+# this shebang is needed for the messages to come through correctly
 
 import sys
 sys.path.append('scripts')

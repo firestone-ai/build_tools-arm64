@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
+# this shebang is needed for the messages to come through correctly
 
 import config
 import base
@@ -70,6 +71,7 @@ def make_pro_file(makefiles_dir, pro_file):
         if not base.is_file(pro_file):
           base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)
       if ("0" != config.option("multiprocess")):
+        # this is what is actually run
         base.cmd_and_return_cwd(base.app_make(), ["-f", makefiles_dir + "/build.makefile_" + file_suff, "-j" + str(multiprocessing.cpu_count())])
       else:
         base.cmd_and_return_cwd(base.app_make(), ["-f", makefiles_dir + "/build.makefile_" + file_suff])
@@ -98,7 +100,9 @@ def make_pro_file(makefiles_dir, pro_file):
 # make build.pro
 def make():
   is_no_brandind_build = base.is_file("config")
+  print("Running the make_pro")
   make_pro_file("makefiles", "build.pro")
+  print("done with make_pro")
   if config.check_option("module", "builder") and base.is_windows() and is_no_brandind_build:
     # check replace
     replace_path_lib = ""

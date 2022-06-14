@@ -1,8 +1,9 @@
 FROM 192.168.1.130:5000/onlyoffice:10
 
-RUN \
-rm /build_tools/make.py
+RUN rm /build_tools/make.py /build_tools/scripts/build.py
 ADD ./make.py /build_tools/make.py
+ADD ./scripts/build.py /build_tools/scripts/build.py
+
 RUN export onlyofficeautomate=2 && \
 export onlyofficemake=3 && \
 cd /build_tools/tools/linux && \

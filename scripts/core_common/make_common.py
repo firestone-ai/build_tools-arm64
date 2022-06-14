@@ -35,7 +35,7 @@ def make():
     cef.make()
     icu.make()
     openssl.make()
-    v8.make() # known working now
+    v8.make()
     html2.make()
     hunspell.make(False)
     glew.make()
