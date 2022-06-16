@@ -32,7 +32,7 @@ def is_os_64bit():
   return platform.machine().endswith('64')
 
 def is_os_arm():
-  if -1 == platform.machine().find('arm'):
+  if -1 == platform.machine().find('arm') or platform.machine().find('aarch64'):
     return False
   return True
 

@@ -73,7 +73,11 @@ def make():
             "cef_binary.tar.bz2"
         ])
         
-        os.makedirs("/core/Common/3dParty/cef/linux_arm64/build")
+        try:
+            os.makedirs("/core/Common/3dParty/cef/linux_arm64/build")
+        except OSError:
+            pass
+        
         os.remove("cef_binary.tar.bz2")
         
         base.copy_files("cef_binary/Release/*",

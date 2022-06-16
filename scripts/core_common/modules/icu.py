@@ -63,25 +63,39 @@ def make():
       if base.is_dir(base_dir + "/linux_arm64"):
         base.delete_dir(base_dir + "/linux_arm64")
 
-    if not base.is_dir(base_dir + "/linux_64"):
-      base.create_dir(base_dir + "/icu/cross_build")
-      os.chdir("icu/cross_build")
-      base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
-      base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
-      base.cmd("make", ["install"], True)
-      base.create_dir(base_dir + "/linux_64")
-      base.create_dir(base_dir + "/linux_64/build")
-      base.copy_file(base_dir + "/icu/cross_build_install/lib/libicudata.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicudata.so." + icu_major)
-      base.copy_file(base_dir + "/icu/cross_build_install/lib/libicuuc.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicuuc.so." + icu_major)
-      base.copy_dir(base_dir + "/icu/cross_build_install/include", base_dir + "/linux_64/build/include")
-      
-    if config.check_option("platform", "linux_arm64") and not base.is_dir(base_dir + "/linux_arm64") and not base.is_os_arm():
+    if os.uname()[len(os.uname())-1] == "aarch64":
+        if not base.is_dir(base_dir + "/linux_64"):
+            base.create_dir(base_dir + "/icu/cross_build")
+            os.chdir("icu/cross_build")
+            base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
+            base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
+            base.cmd("make", ["install"], True)
+            base.create_dir(base_dir + "/linux_64")
+            base.create_dir(base_dir + "/linux_64/build")
+            base.copy_file(base_dir + "/icu/cross_build_install/lib/libicudata.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicudata.so." + icu_major)
+            base.copy_file(base_dir + "/icu/cross_build_install/lib/libicuuc.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicuuc.so." + icu_major)
+            base.copy_dir(base_dir + "/icu/cross_build_install/include", base_dir + "/linux_64/build/include")
+    
+    else:
+        if not base.is_dir(base_dir + "/linux_64"):
+        base.create_dir(base_dir + "/icu/cross_build")
+        os.chdir("icu/cross_build")
+        base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
+        base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
+        base.cmd("make", ["install"], True)
+        base.create_dir(base_dir + "/linux_64")
+        base.create_dir(base_dir + "/linux_64/build")
+        base.copy_file(base_dir + "/icu/cross_build_install/lib/libicudata.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicudata.so." + icu_major)
+        base.copy_file(base_dir + "/icu/cross_build_install/lib/libicuuc.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicuuc.so." + icu_major)
+        base.copy_dir(base_dir + "/icu/cross_build_install/include", base_dir + "/linux_64/build/include")
+    
+    if config.check_option("platform", "linux_arm64") and not base.is_dir(base_dir + "/linux_arm64") and base.is_os_arm():
       base.create_dir(base_dir + "/icu/linux_arm64")
       os.chdir(base_dir + "/icu/linux_arm64")
       base_arm_tool_dir = base.get_prefix_cross_compiler_arm64()
       base.cmd("./../source/configure", ["--host=arm-linux", "--prefix=" + base_dir + "/icu/linux_arm64_install", "--with-cross-build=" + base_dir + "/icu/cross_build",
         "CC=" + base_arm_tool_dir + "gcc", "CXX=" + base_arm_tool_dir + "g++", "AR=" + base_arm_tool_dir + "ar", "RANLIB=" + base_arm_tool_dir + "ranlib"])
-      base.cmd("make", ["-j4"])
+      base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
       base.cmd("make", ["install"], True)
       base.create_dir(base_dir + "/linux_arm64")
       base.create_dir(base_dir + "/linux_arm64/build")

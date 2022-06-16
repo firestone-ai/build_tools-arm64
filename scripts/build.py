@@ -7,7 +7,10 @@ import os
 import multiprocessing
 
 def make_pro_file(makefiles_dir, pro_file):
-  platforms = config.option("platform").split()
+  if os.uname()[len(os.uname())-1] == "aarch64": # ommit rest of arches since we are on arm64
+    platforms = ["linux_arm64"]
+  else:
+    platforms = config.option("platform").split()
   for platform in platforms:
     if not platform in config.platforms:
       continue
@@ -47,7 +50,10 @@ def make_pro_file(makefiles_dir, pro_file):
     base.set_env("OS_DEPLOY", platform)
 
     # qmake CONFIG+=...
-    config_param = base.qt_config(platform)
+    if os.uname()[len(os.uname())-1] == "aarch64":
+        config_param = "desktop linux_arm64"
+    else:
+        config_param = base.qt_config(platform)
 
     # qmake ADDON
     qmake_addon = []

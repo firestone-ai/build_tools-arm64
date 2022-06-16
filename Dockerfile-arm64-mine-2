@@ -1,0 +1,10 @@
+FROM 192.168.1.130:5000/onlyoffice:1
+
+#RUN rm -v /build_tools/scripts/config.py /build_tools/scripts/build.py
+
+#ADD ./scripts/config.py /build_tools/scripts/config.py
+#ADD ./scripts/build.py /build_tools/scripts/build.py
+
+RUN \
+export onlyofficepart=2 && \
+sh -c ./automate.py desktop

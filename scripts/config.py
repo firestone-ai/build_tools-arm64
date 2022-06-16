@@ -35,23 +35,27 @@ def parse():
   
   # platform
   if check_option("platform", "all"):
-    if ("windows" == host_platform):
-      options["platform"] += " win_64 win_32"
-    elif ("linux" == host_platform):
-      options["platform"] += " linux_64 linux_32"
-    else:
-      options["platform"] += " mac_64"
+        if ("windows" == host_platform):
+            options["platform"] += " win_64 win_32"
+        elif ("linux" == host_platform):
+            options["platform"] += " linux_64 linux_32 linux_arm linux_arm64"
+        else:
+            options["platform"] += " mac_64"
 
   if check_option("platform", "native"):
     bits = "32"
+    if platform.machine() == "aarch64":
+        bits = "arm64"
+    elif platform.machine() == "arm":
+        bits = "arm"
     if platform.machine().endswith('64'):
-      bits = "64"
+        bits = "64"
     if ("windows" == host_platform):
-      options["platform"] += (" win_" + bits)
+        options["platform"] += (" win_" + bits)
     elif ("linux" == host_platform):
-      options["platform"] += (" linux_" + bits)
+        options["platform"] += (" linux_" + bits)
     else:
-      options["platform"] += (" mac_" + bits)
+        options["platform"] += (" mac_" + bits)
 
   if ("mac" == host_platform) and check_option("platform", "mac_arm64") and not base.is_os_arm():
     if not check_option("platform", "mac_64"):
