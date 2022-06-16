@@ -78,16 +78,16 @@ def make():
     
     else:
         if not base.is_dir(base_dir + "/linux_64"):
-        base.create_dir(base_dir + "/icu/cross_build")
-        os.chdir("icu/cross_build")
-        base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
-        base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
-        base.cmd("make", ["install"], True)
-        base.create_dir(base_dir + "/linux_64")
-        base.create_dir(base_dir + "/linux_64/build")
-        base.copy_file(base_dir + "/icu/cross_build_install/lib/libicudata.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicudata.so." + icu_major)
-        base.copy_file(base_dir + "/icu/cross_build_install/lib/libicuuc.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicuuc.so." + icu_major)
-        base.copy_dir(base_dir + "/icu/cross_build_install/include", base_dir + "/linux_64/build/include")
+            base.create_dir(base_dir + "/icu/cross_build")
+            os.chdir("icu/cross_build")
+            base.cmd("./../source/runConfigureICU", ["Linux", "--prefix=" + base_dir + "/icu/cross_build_install"])
+            base.cmd("make", ["-j", str(multiprocessing.cpu_count())])
+            base.cmd("make", ["install"], True)
+            base.create_dir(base_dir + "/linux_64")
+            base.create_dir(base_dir + "/linux_64/build")
+            base.copy_file(base_dir + "/icu/cross_build_install/lib/libicudata.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicudata.so." + icu_major)
+            base.copy_file(base_dir + "/icu/cross_build_install/lib/libicuuc.so." + icu_major + "." + icu_minor, base_dir + "/linux_64/build/libicuuc.so." + icu_major)
+            base.copy_dir(base_dir + "/icu/cross_build_install/include", base_dir + "/linux_64/build/include")
     
     if config.check_option("platform", "linux_arm64") and not base.is_dir(base_dir + "/linux_arm64") and base.is_os_arm():
       base.create_dir(base_dir + "/icu/linux_arm64")
