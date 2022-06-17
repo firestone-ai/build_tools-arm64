@@ -1,5 +1,4 @@
 #!/usr/bin/python -u
-# this shebang is needed for the messages to come through correctly
 
 import config
 import base
@@ -64,12 +63,20 @@ def make_pro_file(makefiles_dir, pro_file):
       print("THIS PLATFORM IS NOT SUPPORTED")
       continue
 
-    # non windows platform
     if not base.is_windows():
       if base.is_file(makefiles_dir + "/build.makefile_" + file_suff):
         base.delete_file(makefiles_dir + "/build.makefile_" + file_suff)
       print("make file: " + makefiles_dir + "/build.makefile_" + file_suff)
-      base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)
+      
+      
+      if platform == "linux_arm64":
+          base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param + " v8_version_89"] + qmake_addon)
+          print("Patching makefile for arm64 build")
+          #base.replaceInFile("/build_tools/makefiles/build.makefile_linux_arm64", "cd /core/DesktopEditor/doctrenderer/ && ( test -e /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 || $(QMAKE) -o /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 /core/DesktopEditor/doctrenderer/doctrenderer.pro -nocache 'CONFIG+=desktop linux_arm64' ) && $(MAKE) -f /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64", "cd /core/DesktopEditor/doctrenderer/ && ( test -e /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 || $(QMAKE) -o /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 /core/DesktopEditor/doctrenderer/doctrenderer.pro -nocache 'CONFIG+=desktop linux_arm64' ) && cp -vrf /core/Common/3dParty/v8_89/v8/include/* ./ && $(MAKE) -f /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64")
+      else:
+          base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)
+          print("Skipping patches for arm64")
+      
       if ("1" == config.option("clean")):
         base.cmd_and_return_cwd(base.app_make(), ["clean", "-f", makefiles_dir + "/build.makefile_" + file_suff], True)
         base.cmd_and_return_cwd(base.app_make(), ["distclean", "-f", makefiles_dir + "/build.makefile_" + file_suff], True)
