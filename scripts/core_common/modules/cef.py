@@ -67,6 +67,7 @@ def make():
                 base.cmd("mv", ["Chromium Embedded Framework.framework", "build/Chromium Embedded Framework.framework"])
 
     else:
+        print("Downloading cef instead of building, because arm64")
         base.download("https://cef-builds.spotifycdn.com/cef_binary_87.1.14%2Bga29e9a3%2Bchromium-87.0.4280.141_linuxarm64_minimal.tar.bz2", "cef_binary.tar.bz2")
         
         base.cmd("tar",["-xvf",
@@ -75,17 +76,19 @@ def make():
         
         try:
             os.makedirs("/core/Common/3dParty/cef/linux_arm64/build")
-        except OSError:
+        except:
             pass
         
         os.remove("cef_binary.tar.bz2")
         
-        base.copy_files("cef_binary/Release/*",
-                        "/core/Common/3dParty/cef/linux_arm64/build/"
-                       )
-        base.copy_files("cef_binary/Resources/*",
-                        "core/Common/3dParty/cef/linux_arm64/build/"
-                       )
+        base.cmd("cp", ["-rv",
+                 "cef_binary_87.1.14+ga29e9a3+chromium-87.0.4280.141_linuxarm64_minimal/Release/.",
+                 "/core/Common/3dParty/cef/linux_arm64/build/"]
+                )
+        base.cmd("cp", ["-rv",
+                 "cef_binary_87.1.14+ga29e9a3+chromium-87.0.4280.141_linuxarm64_minimal/Resources/.",
+                 "/core/Common/3dParty/cef/linux_arm64/build/"]
+                )
         shutil.rmtree(
             "cef_binary_87.1.14+ga29e9a3+chromium-87.0.4280.141_linuxarm64_minimal"
             )

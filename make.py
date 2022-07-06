@@ -14,6 +14,7 @@ import build_server
 import deploy
 import make_common
 import develop
+from os import uname
 
 # parse configuration
 config.parse()
@@ -83,11 +84,18 @@ if base.get_env("onlyofficepart") == '1':
         #base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/include", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/include")
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_32")
         base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/x64/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_64")
-
-elif base.get_env("onlyofficepart") == '2':
+    
+    #if uname()[len(uname())-1] == "aarch64":
+    #    a = base.cmd("mv", ["-v", "/core/Common/3dParty/boost/build/linux_64", "/core/Common/3dParty/boost/build/linux_arm64"])
+    #    print("Trying to move boost: " + str(a))
+    #    del a
+    
     build.make()
     build_js.make()
     build_server.make() #server
+
+elif base.get_env("onlyofficepart") == '2':
     deploy.make()
+
 else:
     print("No onlyofficepart env var..")

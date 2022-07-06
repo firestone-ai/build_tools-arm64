@@ -63,14 +63,6 @@ def install_qt():
     os.remove("/build_tools/tools/linux/qt_source_5.9.9.tar.xz")
     return
 
-if not base.is_file("./node_js_setup_10.x"):
-    print("install dependencies...")
-    deps.install_deps()
-
-if not base.is_dir("./qt_build"):
-    print("install qt...")
-    install_qt()
-
 branch = get_branch_name("../..")
 
 array_args = sys.argv[1:]
@@ -88,21 +80,26 @@ for arg in array_args:
     else:
         array_modules.append(arg)
 
-if ("branch" in config):
-    branch = config["branch"]
+branch = config["branch"] if "branch" in config else "None"
+modules = " ".join(array_modules) if " ".join(array_modules) != "" else "desktop builder server"
 
-print("---------------------------------------------")
-print("build branch: " + branch)
-print("---------------------------------------------")
+platformm = config["platform"]
 
-modules = " ".join(array_modules)
+print(
+    "-" * 46 +
+    "\nbuild branch: " + branch + "\n" +
+    "build modules: " + modules + "\n" +
+    "platform: " + platformm + "\n" +
+    "-" * 46
+)
 
-if "" == modules:
-    modules = "desktop builder server"
+if not base.is_file("./node_js_setup_10.x"):
+    print("install dependencies...")
+    deps.install_deps()
 
-print("---------------------------------------------")
-print("build modules: " + modules)
-print("---------------------------------------------")
+if not base.is_dir("./qt_build"):
+    print("install qt...")
+    install_qt()
 
 build_tools_params = ["--branch", branch, 
                     "--module", modules, 

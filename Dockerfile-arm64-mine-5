@@ -1,0 +1,8 @@
+FROM 192.168.1.130:5000/onlyoffice:4
+
+RUN rm -v /build_tools/scripts/deploy_desktop.py
+ADD ./scripts/deploy_desktop.py /build_tools/scripts/deploy_desktop.py
+
+RUN \
+export onlyofficepart=5 && \
+sh -c "./automate.py --platform=linux_arm64 desktop"

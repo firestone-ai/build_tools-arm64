@@ -93,7 +93,8 @@ def make():
              "v8_monolithic=true",
              "v8_use_external_startup_data=false",
              "use_custom_libcxx=false",
-             "treat_warnings_as_errors=false"
+             "treat_warnings_as_errors=false",
+             "v8_enable_pointer_compression=true"
   ]
 
   if os.uname()[len(os.uname())-1] == "aarch64":
@@ -121,7 +122,7 @@ def make():
     shutil.rmtree("customgn")
     
     base.cmd2("gn", ["gen", "out.gn/linux_arm64", make_args(gn_args, "linux_arm64", False)])
-    base.cmd("ninja", ["-C", "out.gn/linux_arm64"]) # temp hack
+    base.cmd("ninja", ["-C", "out.gn/linux_arm64"]) # hack
 
   elif config.check_option("platform", "linux_64"): # it will try to do x64 even if it's arm64
     base.cmd2("gn", ["gen", "out.gn/linux_64", make_args(gn_args, "linux")])

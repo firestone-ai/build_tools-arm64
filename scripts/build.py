@@ -71,11 +71,11 @@ def make_pro_file(makefiles_dir, pro_file):
       
       if platform == "linux_arm64":
           base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param + " v8_version_89"] + qmake_addon)
-          print("Patching makefile for arm64 build")
-          #base.replaceInFile("/build_tools/makefiles/build.makefile_linux_arm64", "cd /core/DesktopEditor/doctrenderer/ && ( test -e /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 || $(QMAKE) -o /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 /core/DesktopEditor/doctrenderer/doctrenderer.pro -nocache 'CONFIG+=desktop linux_arm64' ) && $(MAKE) -f /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64", "cd /core/DesktopEditor/doctrenderer/ && ( test -e /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 || $(QMAKE) -o /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64 /core/DesktopEditor/doctrenderer/doctrenderer.pro -nocache 'CONFIG+=desktop linux_arm64' ) && cp -vrf /core/Common/3dParty/v8_89/v8/include/* ./ && $(MAKE) -f /build_tools/../core/DesktopEditor/doctrenderer/Makefile.doctrendererlinux_arm64")
+          print("Patching for arm64 build")
+          base.replaceInFile("/core/Common/3dParty/v8/v8.pri", "CORE_V8_PATH_OVERRIDE=$$PWD\nv8_version_89 {\n    CONFIG += c++14\n    CONFIG += use_v8_monolith\n    DEFINES += V8_VERSION_89_PLUS\n\n    core_win_32:CONFIG += build_platform_32\n    core_linux_32:CONFIG += build_platform_32\n    !build_platform_32:DEFINES += V8_COMPRESS_POINTERS\n\n    CORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n}", "\nCORE_V8_PATH_OVERRIDE=$$PWD\nCONFIG += c++14\nCONFIG += use_v8_monolith\nDEFINES += V8_VERSION_89_PLUS\n\nCORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n")
       else:
-          base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)
           print("Skipping patches for arm64")
+          base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)
       
       if ("1" == config.option("clean")):
         base.cmd_and_return_cwd(base.app_make(), ["clean", "-f", makefiles_dir + "/build.makefile_" + file_suff], True)

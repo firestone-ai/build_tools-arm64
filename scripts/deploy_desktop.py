@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
 
 import config
 import base
@@ -12,10 +12,11 @@ def make():
   branding = config.branding()
 
   platforms = config.option("platform").split()
+  if os.uname()[len(os.uname())-1] == "aarch64": # ommit rest of arches since we are on arm64
+    platforms = ["linux_arm64"]
   for native_platform in platforms:
     if not native_platform in config.platforms:
       continue
-
     root_dir = base_dir + ("/" + native_platform + "/" + branding + ("/DesktopEditors" if base.is_windows() else "/desktopeditors"))
     if (base.is_dir(root_dir)):
       base.delete_dir(root_dir)
@@ -171,6 +172,7 @@ def make():
     base.download("https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js", root_dir + "/editors/sdkjs-plugins/v1/plugins.js")
     base.download("https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js", root_dir + "/editors/sdkjs-plugins/v1/plugins-ui.js")
     base.download("https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css", root_dir + "/editors/sdkjs-plugins/v1/plugins.css")
+    
     base.support_old_versions_plugins(root_dir + "/editors/sdkjs-plugins")
 
     base.copy_sdkjs_plugin(git_dir + "/desktop-sdk/ChromiumBasedEditors/plugins", root_dir + "/editors/sdkjs-plugins", "manager", True)
@@ -204,7 +206,7 @@ def make():
     # all themes generate ----
     base.copy_exe(core_build_dir + "/bin/" + platform_postfix, root_dir + "/converter", "allfontsgen")
     base.copy_exe(core_build_dir + "/bin/" + platform_postfix, root_dir + "/converter", "allthemesgen")
-
+    
     if (0 == platform.find("mac")):
       base.mac_correct_rpath_desktop(root_dir)
 
@@ -219,6 +221,7 @@ def make():
       if ("" != config.option("themesparams")):
         themes_params = ["--params=\"" + config.option("themesparams") + "\""]
       base.cmd_exe(root_dir + "/converter/allfontsgen", ["--use-system=\"1\"", "--input=\"" + root_dir + "/fonts\"", "--input=\"" + git_dir + "/core-fonts\"", "--allfonts=\"" + root_dir + "/converter/AllFonts.js\"", "--selection=\"" + root_dir + "/converter/font_selection.bin\""])
+      print("ok")
       base.cmd_exe(root_dir + "/converter/allthemesgen", ["--converter-dir=\"" + root_dir + "/converter\"", "--src=\"" + root_dir + "/editors/sdkjs/slide/themes\"", "--allfonts=\"AllFonts.js\"", "--output=\"" + root_dir + "/editors/sdkjs/common/Images\""] + themes_params)
       base.delete_file(root_dir + "/converter/AllFonts.js")
       base.delete_file(root_dir + "/converter/font_selection.bin")

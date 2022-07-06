@@ -1,0 +1,4 @@
+FROM 192.168.1.130:5000/onlyoffice:4
+
+RUN rm -v /build_tools/scripts/deploy_desktop.py
+ADD ./scripts/deploy_desktop.py /build_tools/scripts/deploy_desktop.py

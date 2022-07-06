@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
 
 import base
 import os
@@ -61,10 +61,11 @@ def parse():
     if not check_option("platform", "mac_64"):
       options["platform"] = "mac_64 " + options["platform"]
 
-  if ("linux" == host_platform) and check_option("platform", "linux_arm64") and not base.is_os_arm():
-    if not check_option("platform", "linux_64"):
-      # linux_64 binaries need only for desktop
+  if ("linux" == host_platform) :
+    if not (check_option("platform", "linux_64") or check_option("platform", "linux_arm64")):
+      # linux_64 binaries need only for desktop -- we have arm64 now
       if check_option("module", "desktop"):
+        print("You should not see this")
         options["platform"] = "linux_64 " + options["platform"]
 
   if check_option("platform", "xp") and ("windows" == host_platform):

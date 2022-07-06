@@ -12,7 +12,7 @@ curl -sL https://deb.nodesource.com/setup_10.x | bash -
 ADD . /build_tools
 WORKDIR /build_tools/tools/linux
 
-RUN apt-get -y install nodejs python python3 clang-10 lld-10 wget sudo x11-utils apt-utils && \
+RUN apt-get -y install nodejs python nano python3 clang-10 lld-10 wget sudo x11-utils apt-utils && \
 rm -v /usr/bin/python && \
 mv -v /usr/bin/clang-10 /usr/bin/clang && \
 mv -v /usr/bin/clang-cpp-10 /usr/bin/clang-cpp && \
@@ -89,10 +89,6 @@ mv -v /usr/bin/lld-10 /usr/bin/lld && \
 mv -v /usr/bin/ld64.lld-10 /usr/bin/ld64.lld && \
 mv -v /usr/bin/lld-link-10 /usr/bin/lld-link && \
 export onlyofficepart=1 && \
-sh -c ./automate.py desktop && \
+sh -c "./automate.py --platform=\"linux_arm64\" desktop" && \
 apt-get clean && \
-rm -rf /var/lib/apt/lists/* && \
-cd ../../scripts && \
-python -u -c "import base; base.replaceInFile(\"../config\", \"module=\\\"desktop builder server\\\"\", \"module=\\\"desktop\\\"\")" && \
-cat ../config && \
-cd ../tools/linux
+rm -rf /var/lib/apt/lists/*
