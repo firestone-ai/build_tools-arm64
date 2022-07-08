@@ -72,7 +72,7 @@ def make_pro_file(makefiles_dir, pro_file):
       if platform == "linux_arm64":
           base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param + " v8_version_89"] + qmake_addon)
           print("Patching for arm64 build")
-          base.replaceInFile("/core/Common/3dParty/v8/v8.pri", "CORE_V8_PATH_OVERRIDE=$$PWD\nv8_version_89 {\n    CONFIG += c++14\n    CONFIG += use_v8_monolith\n    DEFINES += V8_VERSION_89_PLUS\n\n    core_win_32:CONFIG += build_platform_32\n    core_linux_32:CONFIG += build_platform_32\n    !build_platform_32:DEFINES += V8_COMPRESS_POINTERS\n\n    CORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n}", "\nCORE_V8_PATH_OVERRIDE=$$PWD\nCONFIG += c++14\nCONFIG += use_v8_monolith\nDEFINES += V8_VERSION_89_PLUS\n\nCORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n")
+          base.replaceInFile("/core/Common/3dParty/v8/v8.pri", "CORE_V8_PATH_OVERRIDE=$$PWD\nv8_version_89 {\n    CONFIG += c++14\n    CONFIG += use_v8_monolith\n    DEFINES += V8_VERSION_89_PLUS\n\n    core_win_32:CONFIG += build_platform_32\n    core_linux_32:CONFIG += build_platform_32\n    !build_platform_32:DEFINES += V8_COMPRESS_POINTERS\n\n    CORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n}", "\nCORE_V8_PATH_OVERRIDE=$$PWD\nCONFIG += c++14\nCONFIG += use_v8_monolith\nDEFINES += V8_COMPRESS_POINTERS\nDEFINES += V8_31BIT_SMIS_ON_64BIT_ARCH\nDEFINES += V8_VERSION_89_PLUS\n\nCORE_V8_PATH_OVERRIDE = $$PWD/../v8_89\n")
       else:
           print("Skipping patches for arm64")
           base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param] + qmake_addon)

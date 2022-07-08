@@ -1,5 +1,0 @@
-FROM 192.168.1.130:5000/onlyoffice:2
-
-RUN \
-export onlyofficepart=3 && \
-sh -c "./automate.py desktop"

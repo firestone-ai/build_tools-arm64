@@ -18,8 +18,8 @@ def make():
   old_cur = os.getcwd()
   os.chdir(base_dir)
 
-  icu_major = "58"
-  icu_minor = "2"
+  icu_major = "60"
+  icu_minor = "3"
 
   if not base.is_dir("icu"):
     base.cmd("svn", ["export", "https://github.com/unicode-org/icu/tags/release-" + icu_major + "-" + icu_minor + "/icu4c", "./icu", "--non-interactive", "--trust-server-cert"])

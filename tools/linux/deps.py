@@ -6,7 +6,7 @@ import base
 import os
 import subprocess
 
-def install_deps(arm=False):
+def install_deps():
   if base.is_file("./packages_complete"):
     return
 
@@ -65,10 +65,6 @@ def install_deps(arm=False):
     base.cmd("sudo", ["bash", "./node_js_setup_10.x"])
     base.cmd("sudo", ["apt-get", "install", "-y", "nodejs"])
     base.cmd("sudo", ["npm", "install", "-g", "npm@6"])
-  else:
-    print("OK")
-    if not os.uname()[len(os.uname())-1] == "aarch64":
-        base.cmd("sudo", ["apt-get", "-y", "install", "npm", "yarn"], True)
   base.cmd("sudo", ["npm", "install", "-g", "grunt-cli"])
   base.cmd("sudo", ["npm", "install", "-g", "pkg"])
 
@@ -89,4 +85,3 @@ def install_deps(arm=False):
 
 if __name__ == "__main__":
   install_deps()
-

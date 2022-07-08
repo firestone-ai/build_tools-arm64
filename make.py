@@ -14,7 +14,6 @@ import build_server
 import deploy
 import make_common
 import develop
-from os import uname
 
 # parse configuration
 config.parse()
@@ -53,49 +52,38 @@ config.parse_defaults()
 base.check_build_version(base_dir)
 
 # update
-if base.get_env("onlyofficepart") == '1':
-    if ("1" == config.option("update")):
-        repositories = base.get_repositories()
-        base.update_repositories(repositories)
+if ("1" == config.option("update")):
+    repositories = base.get_repositories()
+    base.update_repositories(repositories)
 
-    base.configure_common_apps()
+base.configure_common_apps()
     
-    develop.make();
+develop.make();
 
-    # check only js builds
-    if ("1" == base.get_env("OO_ONLY_BUILD_JS")):
-        build_js.make()
-        exit(0)
-    
-    make_common.make() # core 3rdParty
-
-    # build updmodule for desktop (only for windows version)
-    if ("windows" == base.host_platform()) and (config.check_option("module", "desktop")):
-        config.extend_option("config", "updmodule")
-        config.extend_option("qmake_addon", "LINK=https://download.onlyoffice.com/install/desktop/editors/windows/onlyoffice/appcast.xml")
-        
-        if not base.is_file(base_dir + "/tools/WinSparkle-0.7.0.zip"):
-            base.cmd("curl.exe", ["https://d2ettrnqo7v976.cloudfront.net/winsparkle/WinSparkle-0.7.0.zip", "--output", base_dir + "/tools/WinSparkle-0.7.0.zip"])
-        
-        if not base.is_dir(base_dir + "/tools/WinSparkle-0.7.0"):
-            base.cmd("7z.exe", ["x", base_dir + "/tools/WinSparkle-0.7.0.zip", "-otools"])
-        
-        base.create_dir(base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle")
-        #base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/include", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/include")
-        base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_32")
-        base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/x64/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_64")
-    
-    #if uname()[len(uname())-1] == "aarch64":
-    #    a = base.cmd("mv", ["-v", "/core/Common/3dParty/boost/build/linux_64", "/core/Common/3dParty/boost/build/linux_arm64"])
-    #    print("Trying to move boost: " + str(a))
-    #    del a
-    
-    build.make()
+# check only js builds
+if ("1" == base.get_env("OO_ONLY_BUILD_JS")):
     build_js.make()
-    build_server.make() #server
+    exit(0)
 
-elif base.get_env("onlyofficepart") == '2':
-    deploy.make()
+make_common.make() # core 3rdParty
 
-else:
-    print("No onlyofficepart env var..")
+# build updmodule for desktop (only for windows version)
+if ("windows" == base.host_platform()) and (config.check_option("module", "desktop")):
+    config.extend_option("config", "updmodule")
+    config.extend_option("qmake_addon", "LINK=https://download.onlyoffice.com/install/desktop/editors/windows/onlyoffice/appcast.xml")
+    
+    if not base.is_file(base_dir + "/tools/WinSparkle-0.7.0.zip"):
+        base.cmd("curl.exe", ["https://d2ettrnqo7v976.cloudfront.net/winsparkle/WinSparkle-0.7.0.zip", "--output", base_dir + "/tools/WinSparkle-0.7.0.zip"])
+    
+    if not base.is_dir(base_dir + "/tools/WinSparkle-0.7.0"):
+        base.cmd("7z.exe", ["x", base_dir + "/tools/WinSparkle-0.7.0.zip", "-otools"])
+    
+    base.create_dir(base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle")
+    #base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/include", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/include")
+    base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_32")
+    base.copy_dir(base_dir + "/tools/WinSparkle-0.7.0/x64/Release", base_dir + "/../desktop-apps/win-linux/3dparty/WinSparkle/win_64")
+
+build.make()
+build_js.make()
+build_server.make() #server
+deploy.make()

@@ -94,7 +94,8 @@ def make():
              "v8_use_external_startup_data=false",
              "use_custom_libcxx=false",
              "treat_warnings_as_errors=false",
-             "v8_enable_pointer_compression=true"
+             "v8_enable_pointer_compression=true",
+             "v8_enable_31bit_smis_on_64bit_arch=true"
   ]
 
   if os.uname()[len(os.uname())-1] == "aarch64":
