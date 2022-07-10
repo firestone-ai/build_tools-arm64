@@ -32,22 +32,11 @@ def make():
             if base.is_dir(toolchain):
                 check_android_ndk_macos_arm(toolchain + "/prebuilt")
     
-    print("--- Boost ---")
     boost.make()
-    
-    print("--- Cef ---")
     cef.make()
-    
-    print("--- Icu ---")
     icu.make()
-    
-    print("--- Openssl ---")
     openssl.make()
-    
-    print("--- v8 ---")
     v8.make()
-    
-    print("--- rest ---")
     html2.make()
     hunspell.make(False)
     glew.make()
@@ -55,6 +44,5 @@ def make():
     if config.check_option("module", "mobile"):
         curl.make()
         websocket.make()
-        print("--- done ---")
     
     return

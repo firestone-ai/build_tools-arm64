@@ -68,7 +68,6 @@ def make_pro_file(makefiles_dir, pro_file):
         base.delete_file(makefiles_dir + "/build.makefile_" + file_suff)
       print("make file: " + makefiles_dir + "/build.makefile_" + file_suff)
       
-      
       if platform == "linux_arm64":
           base.cmd(qt_dir + "/bin/qmake", ["-nocache", pro_file, "CONFIG+=" + config_param + " v8_version_89"] + qmake_addon)
           print("Patching for arm64 build")
@@ -113,6 +112,15 @@ def make_pro_file(makefiles_dir, pro_file):
 # make build.pro
 def make():
   is_no_brandind_build = base.is_file("config")
+  if os.uname()[len(os.uname())-1] == "aarch64":
+    base.cmd(
+      "cp",
+      ["/core/Common/3dParty/icu/linux_arm64/build/libicudata.so.60",
+       "/core/Common/3dParty/icu/linux_arm64/build/libicudata.so.58"])
+    base.cmd(
+      "cp",
+      ["/core/Common/3dParty/icu/linux_arm64/build/libicuuc.so.60",
+       "/core/Common/3dParty/icu/linux_arm64/build/libicuuc.so.58"])
   print("Running the make_pro")
   make_pro_file("makefiles", "build.pro")
   print("done with make_pro")

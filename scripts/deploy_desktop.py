@@ -229,6 +229,10 @@ def make():
 
     base.delete_exe(root_dir + "/converter/allfontsgen")
     base.delete_exe(root_dir + "/converter/allthemesgen")
+    
+    base.cmd("cp", ["/core/Common/3dParty/icu/linux_arm64/build/libicudata.so.60.3", "/build_tools/out/libicudata.so.60"])
+    base.cmd("cp", ["/core/Common/3dParty/icu/linux_arm64/build/libicuuc.so.60.3", "/build_tools/out/libicuuc.so.60"])
+    base.cmd("cp", ["/core/Common/3dParty/icu/linux_arm64/build/libicui18n.so.60.3", "/build_tools/out/libicui18n.so.60"])
 
     if not isUseJSC:
       base.delete_file(root_dir + "/editors/sdkjs/slide/sdk-all.cache")

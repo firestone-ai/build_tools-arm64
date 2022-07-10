@@ -94,5 +94,4 @@ mv -v /usr/bin/lld-10 /usr/bin/lld && \
 mv -v /usr/bin/ld64.lld-10 /usr/bin/ld64.lld && \
 mv -v /usr/bin/lld-link-10 /usr/bin/lld-link
 
-CMD sh -c "./automate.py --platform=\"linux_arm64\" desktop" && \
-cp -rv /core/Common/3dParty/icu/icu /build_tools/out/icu2
+CMD sh -c "./automate.py --platform=\"linux_arm64\" desktop"
